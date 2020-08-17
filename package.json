@@ -10,9 +10,9 @@
   "private": true,
   "version": "1.25.5",
   "dependencies": {
+    "aws-sdk": "^2.734.0",
     "casper": "github:tryghost/Casper#3.0.12",
     "ghost": "^3.13.3",
-    "ghost-storage-adapter-s3": "^2.8.0",
     "mysql": "^2.18.1",
     "sqlite3": "^5.0.0"
   },
