@@ -1,7 +1,7 @@
-import AWS from 'aws-sdk'
-import BaseStore from 'ghost-storage-base'
-import { join } from 'path'
-import { readFile } from 'fs'
+const AWS = require("aws-sdk");
+const BaseStore = require("ghost-storage-base");
+const { join} = require("path");
+const { readFile} = require("fs");
 
 const readFileAsync = fp => new Promise((resolve, reject) => readFile(fp, (err, data) => err ? reject(err) : resolve(data)))
 const stripLeadingSlash = s => s.indexOf('/') === 0 ? s.substring(1) : s
