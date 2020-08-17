@@ -1,0 +1,25 @@
+{
+  "name": "ghost-on-heroku",
+  "description": "Just a blogging platform on Heroku.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yellyoshua/ghost-on-heroku.git"
+  },
+  "bugs": "https://github.com/TryGhost/Ghost/issues",
+  "private": true,
+  "version": "1.25.5",
+  "dependencies": {
+    "casper": "github:tryghost/Casper#3.0.12",
+    "ghost": "^3.13.3",
+    "ghost-storage-adapter-s3": "^2.8.0",
+    "mysql": "^2.18.1",
+    "npm": "^6.14.4"
+  },
+  "engines": {
+    "node": "10.x"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
