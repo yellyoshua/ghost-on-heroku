@@ -47,7 +47,7 @@ function createConfig() {
       transports: ["stdout"]
     },
     mail: {
-      from : `Notifies <${SMTP_USER}>`,
+      from : `Notifies <${process.env.SMTP_USER}>`,
       transport: 'SMTP',
       options: {
         service: 'Sendmail',
