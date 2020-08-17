@@ -11,7 +11,18 @@
     }
   },
   "mail": {
-    "transport": "Direct"
+    "from" : "Notifies <notificaciones@gonzu.edu.ec>",
+    "transport": "SMTP",
+    "options": {
+      "service": "Sendmail",
+      "host": "mail.gonzu.edu.ec",
+      "port": 465,
+      "secureConnection": true,
+      "auth": {
+        "user": "notificaciones@gonzu.edu.ec",
+        "pass": "verdadjaime"
+      }
+    }
   },
   "logging": {
     "transports": [

@@ -147,4 +147,4 @@ class Store extends BaseStore {
   }
 }
 
-export default Store
+module.exports = Store;
