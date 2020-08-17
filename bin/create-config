@@ -9,7 +9,7 @@ var envValues = require('./common/env-values');
 var appRoot = path.join(__dirname, '..');
 
 function createConfig() {
-  var fileStorage, storage;
+  var fileStorage, storage, databaseConfig;
 
   if (!!process.env.S3_ACCESS_KEY_ID) {
     fileStorage = true
@@ -39,6 +39,23 @@ function createConfig() {
     fileStorage = false
     storage = {}
   }
+  if(!!envValues.mysqlDatabaseUrl) {
+    databaseConfig = {
+      client: 'mysql',
+      connection: getMysqlConfig(envValues.mysqlDatabaseUrl),
+      pool: { min: 0, max: 5 },
+      debug: false
+    }
+  } else {
+    databaseConfig = {
+      client: "sqlite3",
+      connection: {
+        filename: "content/data/ghost-database.db"
+      },
+      useNullAsDefault: true,
+      debug: false
+    }
+  }
 
   config = {
     url: process.env.PUBLIC_URL,
@@ -64,7 +81,7 @@ function createConfig() {
     storage: storage,
     database: {
       client: 'mysql',
-      connection: getMysqlConfig(!!envValues.mysqlDatabaseUrl ? envValues.mysqlDatabaseUrl : null),
+      connection: databaseConfig,
       pool: { min: 0, max: 5 },
       debug: false
     },
