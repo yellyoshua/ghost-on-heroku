@@ -8,10 +8,4 @@ cat "config.production.json"
 
 bin/wait-for-db
 
-mkdir -p ./content/themes
-mkdir -p ./content/adapters/storage
-
-cp -r ./node_modules/casper ./content/themes/casper
-cp -r ./node_modules/ghost-storage-adapter-s3 ./content/adapters/storage/s3
-
 knex-migrator init --mgpath node_modules/ghost
