@@ -79,12 +79,7 @@ function createConfig() {
     },
     fileStorage: fileStorage,
     storage: storage,
-    database: {
-      client: 'mysql',
-      connection: databaseConfig,
-      pool: { min: 0, max: 5 },
-      debug: false
-    },
+    database: databaseConfig,
     server: {
       host: '0.0.0.0',
       port: process.env.PORT
