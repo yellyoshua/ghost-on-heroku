@@ -85,7 +85,7 @@ function createConfig() {
       port: process.env.PORT
     },
     paths: {
-      contentPath: path.join(appRoot, '/content/')
+      contentPath: path.join(appRoot, '/content')
     }
   };
 
