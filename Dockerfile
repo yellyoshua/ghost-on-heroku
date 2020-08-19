@@ -1,11 +1,14 @@
-FROM alpine:latest
 FROM node:12.18-alpine
 
-COPY . /srv/app
-WORKDIR /srv/app
+ENV GHOST_INSTALL=/srv/ghost-on-heroku
+ENV GHOST_CONTENT=/srv/ghost-on-heroku/content
+ENV NODE_ENV=production
 
-RUN npm install
+COPY . /srv/ghost-on-heroku
+WORKDIR $GHOST_INSTALL
+
+RUN npm install --save
+VOLUME $GHOST_CONTENT
 
 EXPOSE 2368
-
 CMD [ "npm", "start"]
