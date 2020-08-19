@@ -1,3 +1,4 @@
+require("dotenv").config();
 var ghost = require('ghost');
 
 // Run a single Ghost process
