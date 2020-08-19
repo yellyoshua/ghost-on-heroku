@@ -1,0 +1,130 @@
+#!/usr/bin/env node
+// Ghost Configuration for Heroku
+
+require("dotenv").config();
+var fs = require('fs');
+var path = require('path');
+var url = require('url');
+
+var envValues = require('./common/env-values');
+var appRoot = path.join(__dirname, '..');
+
+function createConfig() {
+  var fileStorage, storage, databaseConfig;
+
+  if (!!process.env.S3_ACCESS_KEY_ID) {
+    fileStorage = true
+    storage = {
+      active: 's3',
+      's3': {
+        accessKeyId:     process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_ACCESS_SECRET_KEY,
+        bucket:          process.env.S3_BUCKET_NAME,
+        region:          process.env.S3_BUCKET_REGION,
+        assetHost:       process.env.S3_ASSET_HOST_URL
+      }
+    }
+  } else if (!!process.env.BUCKETEER_AWS_ACCESS_KEY_ID) {
+    fileStorage = true
+    storage = {
+      active: 's3',
+      's3': {
+        accessKeyId:     process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
+        bucket:          process.env.BUCKETEER_BUCKET_NAME,
+        region:          process.env.S3_BUCKET_REGION,
+        assetHost:       process.env.S3_ASSET_HOST_URL
+      }
+    }
+  } else {
+    fileStorage = false
+    storage = {}
+  }
+  if(!!envValues.mysqlDatabaseUrl) {
+    databaseConfig = {
+      client: 'mysql',
+      connection: getMysqlConfig(envValues.mysqlDatabaseUrl),
+      pool: { min: 0, max: 5 },
+      debug: false
+    }
+  } else {
+    databaseConfig = {
+      client: "sqlite3",
+      connection: {
+        filename: "content/data/ghost-database.db"
+      },
+      useNullAsDefault: true,
+      debug: false
+    }
+  }
+
+  config = {
+    url: process.env.PUBLIC_URL,
+    logging: {
+      level: "info",
+      transports: ["stdout"]
+    },
+    mail: {
+      from : `Notifies <${process.env.SMTP_USER}>`,
+      transport: 'SMTP',
+      options: {
+        service: 'Sendmail',
+        host: process.env.SMTP_HOST,
+        port: 465,
+        secureConnection: true,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD
+        }
+      }
+    },
+    fileStorage: fileStorage,
+    storage: storage,
+    database: databaseConfig,
+    server: {
+      host: '0.0.0.0',
+      port: process.env.PORT
+    },
+    paths: {
+      contentPath: path.join(appRoot, '/content')
+    }
+  };
+
+  return config;
+}
+
+function getMysqlConfig(connectionUrl) {
+  if (connectionUrl == null) {
+    return {};
+  }
+
+  var dbConfig = url.parse(connectionUrl);
+  if (dbConfig == null) {
+    return {};
+  }
+
+  var dbAuth = dbConfig.auth ? dbConfig.auth.split(':') : [];
+  var dbUser = dbAuth[0];
+  var dbPassword = dbAuth[1];
+
+  if (dbConfig.pathname == null) {
+    var dbName = 'ghost';
+  } else {
+    var dbName = dbConfig.pathname.split('/')[1];
+  }
+
+  var dbConnection = {
+    host: dbConfig.hostname,
+    port: dbConfig.port || '3306',
+    user: dbUser,
+    password: dbPassword,
+    database: dbName
+  };
+  return dbConnection;
+}
+
+var configContents = JSON.parse(JSON.stringify(createConfig(), null, 2));
+
+module.exports = function() {
+  return configContents;
+}

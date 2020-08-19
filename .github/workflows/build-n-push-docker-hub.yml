@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build N push Docker Image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DkrHub_USERNAME }}
+          password: ${{ secrets.DkrHub_PASSWORD }}
+          repository: ${{ github.repository }}
+          tag_with_ref: true
+          tag_with_sha: false
+          tags: ${{ github.sha }}
