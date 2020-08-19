@@ -11,4 +11,5 @@ RUN npm install --save
 VOLUME $GHOST_CONTENT
 
 EXPOSE 2368
-CMD [ "npm", "start"]
+
+CMD ["/bin/sh", "startApp.sh"]
